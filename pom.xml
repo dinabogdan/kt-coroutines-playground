@@ -29,6 +29,11 @@
             <artifactId>http4k-server-netty</artifactId>
             <version>3.245.0</version>
         </dependency>
+        <dependency>
+            <groupId>no.tornado</groupId>
+            <artifactId>tornadofx</artifactId>
+            <version>1.7.20</version>
+        </dependency>
     </dependencies>
 
     <groupId>com.freesoft</groupId>
