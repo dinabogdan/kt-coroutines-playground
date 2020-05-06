@@ -9,8 +9,28 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-class HttpWaldoFinder : Controller() {
+interface WaldoFinder {
+    suspend fun wheresWaldo(starterName: String): String
+}
+
+class HttpWaldoFinder : Controller(), WaldoFinder {
     private val api: Rest by inject()
+
+    override suspend fun wheresWaldo(starterName: String): String {
+        val firstName = fetchNewName(starterName)
+        println("Found $firstName name".withThreadId())
+
+        val secondName = fetchNewName(firstName)
+        println("Found $secondName name".withThreadId())
+
+        val thirdName = fetchNewName(secondName)
+        println("Found $thirdName name".withThreadId())
+
+        val fourthName = fetchNewName(thirdName)
+        println("Found $thirdName name".withThreadId())
+
+        return fetchNewName(fourthName)
+    }
 
     private suspend fun fetchNewName(inputName: String): String {
         val url = URI("http://localhost:8080/wheresWaldo/$inputName")
