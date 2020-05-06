@@ -44,8 +44,4 @@ class HttpWaldoFinder : Controller(), WaldoFinder {
             client.send(request, handler).body()
         }
     }
-
-    private fun String.withThreadId() = "$this on thread ${Thread.currentThread().id}"
-
-
 }
