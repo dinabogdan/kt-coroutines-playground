@@ -14,7 +14,6 @@ interface WaldoFinder {
 }
 
 class HttpWaldoFinder : Controller(), WaldoFinder {
-    private val api: Rest by inject()
 
     override suspend fun wheresWaldo(starterName: String): String {
         val firstName = fetchNewName(starterName)
@@ -27,7 +26,7 @@ class HttpWaldoFinder : Controller(), WaldoFinder {
         println("Found $thirdName name".withThreadId())
 
         val fourthName = fetchNewName(thirdName)
-        println("Found $thirdName name".withThreadId())
+        println("Found $fourthName name".withThreadId())
 
         return fetchNewName(fourthName)
     }
