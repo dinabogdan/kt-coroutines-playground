@@ -11,10 +11,12 @@ import java.net.http.HttpResponse
 
 interface WaldoFinder {
     suspend fun wheresWaldo(starterName: String): String
+
 }
 
 class HttpWaldoFinder : Controller(), WaldoFinder {
 
+    val x = emptyList<String>()
     override suspend fun wheresWaldo(starterName: String): String {
         val firstName = fetchNewName(starterName)
         println("Found $firstName name".withThreadId())
