@@ -25,6 +25,17 @@ suspend fun <T> CompletableFuture<T>.await(): T = suspendCoroutine<T> { cont: Co
     }
 }
 
+class CompletableFutureCoroutine<T>(override val context: CoroutineContext) : CompletableFuture<T>(), Continuation<T> {
+    override fun resumeWith(result: Result<T>) {
+        result
+                .onSuccess { complete(it) }
+                .onFailure { completeExceptionally(it) }
+    }
+}
+
+fun <T> future(context: CoroutineContext = EmptyCoroutineContext, block: suspend () -> T): CompletableFuture<T> =
+        CompletableFutureCoroutine<T>(context).also { block.startCoroutine(completion = it) }
+
 fun launch(context: CoroutineContext = EmptyCoroutineContext, block: suspend () -> Unit) =
         block.startCoroutine(Continuation(context) { result ->
             result.onFailure { exception ->
