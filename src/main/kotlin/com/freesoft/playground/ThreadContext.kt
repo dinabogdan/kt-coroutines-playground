@@ -9,6 +9,7 @@ import kotlin.coroutines.AbstractCoroutineContextElement
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
+import kotlin.system.measureTimeMillis
 
 // Cooperative multi tasking; this code is done in order to provide thread confinedness
 
@@ -50,31 +51,34 @@ class ThreadContext(
 }
 
 fun main() {
-    println("Starting MyEventThread")
-    val context = newSingleThreadContext("MyEventThread")
-    val f = future(context) {
-        println("Hello world!")
+    val timer = measureTimeMillis {
+        println("Starting MyEventThread")
+        val context = newSingleThreadContext("MyEventThread")
+        val f = future(context) {
+            println("Hello world!")
 
-        val future1 = future(context) {
-            println("future1 is sleeping")
-            delay(1000)
-//            Thread.sleep(1000)
-            println("future1 returns 1")
-            1
+            val future1 = future(context) {
+                println("future1 is sleeping")
+//                delay(1000)
+                Thread.sleep(1000)
+                println("future1 returns 1")
+                1
+            }
+
+            val future2 = future(context) {
+                println("future2 is sleeping")
+//                delay(1000)
+                Thread.sleep(1000)
+                println("future2 returns 2")
+                2
+            }
+
+            println("wait for both future1 and future2")
+            val sum = future1.await() + future2.await()
+            println("the sum is: $sum")
         }
-
-        val future2 = future(context) {
-            println("future2 is sleeping")
-            delay(1000)
-//            Thread.sleep(1000)
-            println("future2 returns 2")
-            2
-        }
-
-        println("wait for both future1 and future2")
-        val sum = future1.await() + future2.await()
-        println("the sum is: $sum")
+        f.get()
+        println("Terminated")
     }
-    f.get()
-    println("Terminated")
+    println("Terminated in: $timer")
 }
