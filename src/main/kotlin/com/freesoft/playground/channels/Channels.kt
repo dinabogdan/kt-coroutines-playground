@@ -1,4 +1,4 @@
-package com.freesoft.playground
+package com.freesoft.playground.channels
 
 import java.util.ArrayDeque
 import java.util.concurrent.atomic.AtomicLong
@@ -23,7 +23,7 @@ interface ReceiveIterator<out T> {
     suspend operator fun next(): T
 }
 
-private const val CHANNEL_CLOSED = "com.freesoft.playground.Channel was closed"
+private const val CHANNEL_CLOSED = "com.freesoft.playground.channels.Channel was closed"
 
 private val channelCounter = AtomicLong()
 
@@ -221,7 +221,7 @@ class Channel<T>(
                     killList!!.add(unlinkFirstWaiter() ?: break)
                 }
             } else {
-                check(!hasWaiters) { "com.freesoft.playground.Channel with butter not-full and not-empty shall not have waiters" }
+                check(!hasWaiters) { "com.freesoft.playground.channels.Channel with butter not-full and not-empty shall not have waiters" }
                 return // nothing to do
             }
         }
@@ -262,7 +262,7 @@ class Channel<T>(
         }
 
     override fun toString(): String = locked {
-        "com.freesoft.playground.Channel #$number closed=$closed, buffer=$buffer, waiters=$waitersString"
+        "com.freesoft.playground.channels.Channel #$number closed=$closed, buffer=$buffer, waiters=$waitersString"
     }
 }
 
